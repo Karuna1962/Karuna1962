@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Statistics - Smart Study Planner</title>
+
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="stats.css">
+<link rel="stylesheet" href="nav.css">
+
+<style>
+
+/* TEXT */
+h1, h2, h3, p, div, span {
+    color: #fff;
+}
+
+/* CARD */
+.card {
+    background: rgba(60, 0, 80, 0.6);
+    margin-bottom: 25px;
+}
+
+/* STAT CARD */
+.stat-card {
+    background: rgba(70, 0, 90, 0.7);
+}
+
+.stat-number {
+    color: #fff;
+}
+
+/* QUICK ACTIONS */
+.quick-actions {
+    margin-top: 20px;
+}
+
+.actions-row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* CHART */
+.chart-container {
+    text-align: center;
+    margin: 40px 0;
+}
+
+#completionChart {
+    max-width: 250px;
+    margin: auto;
+}
+
+/* PRIORITY */
+.priority-breakdown {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.priority-item {
+    background: rgba(255, 78, 205, 0.15);
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+/* BUTTON */
+.btn-primary {
+    background: linear-gradient(45deg, var(--accent-1, #ff4ecd), var(--accent-deep, #a4133c));
+    color: #fff;
+}
+
+/* REMOVE BLUE */
+a:focus,
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 78, 205, 0.5);
+}
+
+/* FOOTER */
+.footer {
+    margin-top: 50px;
+    padding: 15px;
+    text-align: center;
+    background: rgba(40, 0, 50, 0.7);
+    color: #ff8fab;
+    backdrop-filter: blur(10px);
+    font-size: 14px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    #completionChart {
+        max-width: 100%;
+    }
+
+    .actions-row {
+        flex-direction: column;
+    }
+
+    .priority-breakdown {
+        grid-template-columns: 1fr;
+    }
+
+    .chart-container {
+        padding: 0 10px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+<div class="nav-container">
+
+<div class="logo">📚 Smart Study</div>
+
+<!-- ✅ HAMBURGER -->
+<div class="menu-toggle">
+    ☰
+</div>
+
+<ul class="nav-links" id="navLinks">
+    <li><a href="index.html">🏠 Home</a></li>
+    <li><a href="add-task.html">➕ Add Task</a></li>
+    <li><a href="tasks.html">📋 Tasks</a></li>
+    <li><a href="stats.html">📊 Stats</a></li>
+    <li><a href="resources.html">📖 Resources</a></li>
+
+    <li class="logout-item">
+        <button onclick="logout()" class="btn btn-danger">🚪 Logout</button>
+    </li>
+</ul>
+
+</div>
+</nav>
+<div class="container">
+
+<h1 class="page-title">📊 Study Statistics</h1>
+
+<div class="stats-grid">
+
+<!-- QUICK ACTIONS -->
+<div class="card quick-actions">
+    <h2 style="margin-bottom: 20px;">⚡ Quick Actions</h2>
+
+    <div class="actions-row">
+        <a href="add-task.html" class="btn btn-primary">➕ Add Task</a>
+        <a href="tasks.html" class="btn btn-primary">📋 View Tasks</a>
+        <button onclick="clearTasks()" class="btn btn-danger">🗑️ Clear All</button>
+    </div>
+</div>
+
+<div class="stat-card">
+<div class="stat-number" id="totalTasksStat">0</div>
+<div>Total Tasks</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-number" id="completedTasks">0</div>
+<div>Completed</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-number" id="pendingTasks">0</div>
+<div>Pending</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-number" id="completionRate">0%</div>
+<div>Completion Rate</div>
+</div>
+
+</div>
+
+<div class="card chart-container">
+<h2>📈 Task Completion</h2>
+<canvas id="completionChart"></canvas>
+</div>
+
+<div class="card">
+<h2>🎯 Priority Breakdown</h2>
+<div class="priority-breakdown" id="priorityStats"></div>
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+✨ Smart Study Planner • Stay Focused 💗 | © 2026
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+// 🔐 AUTH
+if (localStorage.getItem('isLoggedIn') !== 'true') {
+    window.location.href = 'login.html';
+}
+
+let chartInstance = null;
+
+// 🔥 LOAD STATS (ALWAYS FRESH DATA)
+function loadStats() {
+
+    const tasks = JSON.parse(localStorage.getItem('studyTasks')) || [];
+
+    const total = tasks.length;
+    const completed = tasks.filter(t => t.completed).length;
+    const pending = total - completed;
+    const rate = total ? Math.round((completed / total) * 100) : 0;
+
+    document.getElementById('totalTasksStat').textContent = total;
+    document.getElementById('completedTasks').textContent = completed;
+    document.getElementById('pendingTasks').textContent = pending;
+    document.getElementById('completionRate').textContent = rate + '%';
+
+    // PRIORITY
+    document.getElementById('priorityStats').innerHTML = `
+        <div class="priority-item">
+            <div style="font-size:2em;">${tasks.filter(t=>t.priority==='high').length}</div>
+            <div>High</div>
+        </div>
+
+        <div class="priority-item">
+            <div style="font-size:2em;">${tasks.filter(t=>t.priority==='medium').length}</div>
+            <div>Medium</div>
+        </div>
+
+        <div class="priority-item">
+            <div style="font-size:2em;">${tasks.filter(t=>t.priority==='low').length}</div>
+            <div>Low</div>
+        </div>
+    `;
+
+    // CHART FIX
+    if (chartInstance) chartInstance.destroy();
+
+    chartInstance = new Chart(document.getElementById('completionChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Completed', 'Pending'],
+            datasets: [{
+                data: [completed, pending],
+                backgroundColor: ['#ff4ecd', '#ff6b6b']
+            }]
+        }
+    });
+}
+
+// 🔁 INITIAL LOAD
+window.addEventListener('load', loadStats);
+
+// 🔥 REAL-TIME (OTHER TABS)
+window.addEventListener('storage', function(e) {
+    if (e.key === 'studyTasks') loadStats();
+});
+
+// 🔥 REAL-TIME (SAME TAB)
+setInterval(loadStats, 1000);
+
+// 🗑️ CLEAR ALL
+function clearTasks() {
+    if (confirm("Delete all tasks?")) {
+        localStorage.removeItem('studyTasks');
+        loadStats();
+    }
+}
+
+// 🚪 LOGOUT
+function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('isLoggedIn');
+        window.location.href = 'login.html';
+    }
+}
+
+
+</script>
+<script>
+const menuToggle = document.querySelector(".menu-toggle");
+const navLinks = document.querySelector(".nav-links");
+if (menuToggle && navLinks) {
+    menuToggle.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+    });
+}
+</script>
+</body>
+</html>

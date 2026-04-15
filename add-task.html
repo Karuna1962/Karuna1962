@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Task</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    
+    <!-- SAME CSS -->
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="add-task.css">
+    <link rel="stylesheet" href="nav.css">
+</head>
+<body>
+
+    <!-- ✅ SAME NAVBAR (UNCHANGED) -->
+    <nav class="navbar">
+<div class="nav-container">
+
+<div class="logo">📚 Smart Study</div>
+
+<!-- ✅ HAMBURGER -->
+<div class="menu-toggle">
+    ☰
+</div>
+
+<ul class="nav-links" id="navLinks">
+    <li><a href="index.html">🏠 Home</a></li>
+    <li><a href="add-task.html">➕ Add Task</a></li>
+    <li><a href="tasks.html">📋 Tasks</a></li>
+    <li><a href="stats.html">📊 Stats</a></li>
+    <li><a href="resources.html">📖 Resources</a></li>
+
+    <li class="logout-item">
+        <button onclick="logout()" class="btn btn-danger">🚪 Logout</button>
+    </li>
+</ul>
+
+</div>
+</nav>
+
+    <div class="container">
+        <h1 class="page-title">➕ Add New Study Task</h1>
+        
+        <!-- IMPROVED CARD -->
+        <div class="card" style="max-width: 600px; margin: auto;">
+            <form id="taskForm">
+
+                <input type="text" id="taskName" placeholder="📌 Task name..." required>
+                
+                <select id="priority" required>
+                    <option value="">⚡ Select Priority</option>
+                    <option value="high">🔴 High Priority</option>
+                    <option value="medium">🟡 Medium Priority</option>
+                    <option value="low">🟢 Low Priority</option>
+                </select>
+                
+           <input type="datetime-local" id="dueDate" required>
+                
+                <textarea id="description" rows="4" placeholder="📝 Task description (optional)"></textarea>
+                
+                <!-- BUTTONS -->
+                <div style="display: flex; gap: 15px;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1;">
+                        ✅ Add Task
+                    </button>
+                    <a href="index.html" class="btn" style="flex: 1; background: #eee; color: #333;">
+                        ← Back
+                    </a>
+                </div>
+
+            </form>
+
+            <!-- SUCCESS MESSAGE -->
+            <div id="successMsg" style="display:none; text-align:center; margin-top:15px; color:#51cf66; font-weight:bold;">
+                🎉 Task added successfully!
+            </div>
+
+        </div>
+    </div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    // 🔐 Authentication Check
+    if (localStorage.getItem('isLoggedIn') !== 'true') {
+        window.location.href = 'login.html';
+    }
+
+    // 📅 DATE SETUP
+    const dueInput = document.getElementById('dueDate');
+
+    function getCurrentDateTime() {
+        const now = new Date();
+        now.setMinutes(now.getMinutes() + 5);
+
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+
+        return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+
+    const formatted = getCurrentDateTime();
+
+    if (dueInput) {
+        dueInput.value = formatted;
+        dueInput.min = formatted; // ✅ important
+    }
+
+    // 📝 FORM SUBMIT
+    const form = document.getElementById('taskForm');
+
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const taskName = document.getElementById('taskName').value.trim();
+
+            if (!taskName) {
+                alert("⚠️ Task name is required");
+                return;
+            }
+
+            if (!dueInput.value) {
+                alert("⚠️ Please select a valid date & time");
+                return;
+            }
+
+            const task = {
+                id: Date.now(),
+                name: taskName,
+                priority: document.getElementById('priority').value,
+                dueDate: dueInput.value,
+                description: document.getElementById('description').value,
+                completed: false,
+                createdAt: new Date().toISOString()
+            };
+
+            let tasks = JSON.parse(localStorage.getItem('studyTasks')) || [];
+            tasks.unshift(task);
+            localStorage.setItem('studyTasks', JSON.stringify(tasks));
+
+            const msg = document.getElementById('successMsg');
+            if (msg) msg.style.display = 'block';
+
+            form.reset();
+
+            // reset date again
+            dueInput.value = getCurrentDateTime();
+
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        });
+    }
+
+});
+
+// 🚪 LOGOUT
+function logout() {
+    if (confirm('Are you sure you want to logout?')) {
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('isLoggedIn');
+        window.location.href = 'login.html';
+    }
+}
+
+// 🍔 NAVBAR
+const menuToggle = document.querySelector(".menu-toggle");
+const navLinks = document.querySelector(".nav-links");
+if (menuToggle && navLinks) {
+    menuToggle.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+    });
+}
+</script>
+
+   
+
+</body>
+</html>

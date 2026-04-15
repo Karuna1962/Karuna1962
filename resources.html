@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Resources - Smart Study Planner</title>
+
+<link rel="stylesheet" href="theme.css">
+<link rel="stylesheet" href="resources.css">
+<link rel="stylesheet" href="nav.css">
+
+<style>
+
+/* SEARCH */
+.search-box {
+    max-width: 500px;
+    margin: 0 auto 40px;
+}
+
+.search-box input {
+    width: 100%;
+    font-size: 18px;
+}
+
+/* RESOURCE GRID */
+.resources-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* CARD */
+.resource-card {
+    background: rgba(255,255,255,0.95);
+    border-radius: 20px;
+    padding: 30px;
+    color: #333;
+}
+
+/* LINK */
+.resource-link {
+    display: block;
+    padding: 10px;
+    margin: 8px 0;
+    background: #f8f9ff;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #333;
+}
+.resource-card h3 {
+    background: linear-gradient(45deg, #ff4ecd, #ff8fab);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.resource-card h3 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.resource-link:hover {
+    background: linear-gradient(45deg, #ff4ecd, #ff6f91);
+    color: white;
+}
+
+/* QUICK TOOLS */
+.quick-tools {
+    margin-top: 40px;
+}
+
+@media (max-width: 768px) {
+    .resources-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .search-box {
+        padding: 0 10px;
+    }
+
+    .resource-card {
+        padding: 24px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<nav class="navbar">
+<div class="nav-container">
+
+<div class="logo">📚 Smart Study</div>
+
+<!-- ✅ HAMBURGER -->
+<div class="menu-toggle">
+    ☰
+</div>
+
+<ul class="nav-links" id="navLinks">
+    <li><a href="index.html">🏠 Home</a></li>
+    <li><a href="add-task.html">➕ Add Task</a></li>
+    <li><a href="tasks.html">📋 Tasks</a></li>
+    <li><a href="stats.html">📊 Stats</a></li>
+    <li><a href="resources.html">📖 Resources</a></li>
+
+    <li class="logout-item">
+        <button onclick="logout()" class="btn btn-danger">🚪 Logout</button>
+    </li>
+</ul>
+
+</div>
+</nav>
+<div class="container">
+
+<h1 class="page-title">📖 Study Resources & Tools</h1>
+
+<!-- 🔍 SEARCH -->
+<div class="search-box">
+<input type="text" id="resourceSearch"
+placeholder="🔍 Search or press Enter for Google..."
+onkeyup="handleSearch(event)">
+</div>
+
+<div class="resources-grid" id="resourcesGrid"></div>
+
+<!-- QUICK TOOLS -->
+<div class="quick-tools card">
+<h3>⚡ Quick Study Tools</h3>
+
+<div class="tools-grid">
+<a href="#" class="btn btn-primary" onclick="openTool('pomodoro')">⏱️ Pomodoro</a>
+<a href="#" class="btn btn-primary" onclick="openTool('calculator')">🧮 Calculator</a>
+<a href="#" class="btn btn-primary" onclick="openTool('unitConverter')">📏 Converter</a>
+<a href="#" class="btn btn-primary" onclick="openTool('flashcards')">📝 Flashcards</a>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* 🔥 FULL ORIGINAL DATA RESTORED */
+const resourcesData = [
+    {
+        id: 1,
+        title: "🧮 Mathematics Resources",
+        category: "math",
+        description: "Calculus, Algebra, Geometry, Trigonometry & more",
+        links: [
+            { name: "Khan Academy Math", url: "https://www.khanacademy.org/math", icon: "📚" },
+            { name: "Wolfram Alpha", url: "https://www.wolframalpha.com/", icon: "🧠" },
+            { name: "Mathway Solver", url: "https://www.mathway.com/", icon: "✅" },
+            { name: "Symbolab", url: "https://www.symbolab.com/", icon: "🔢" },
+            { name: "Desmos Graphing", url: "https://www.desmos.com/calculator", icon: "📈" }
+        ]
+    },
+    {
+        id: 2,
+        title: "🔬 Science Resources",
+        category: "science",
+        description: "Physics, Chemistry, Biology, Astronomy resources",
+        links: [
+            { name: "PhET Simulations", url: "https://phet.colorado.edu/", icon: "🧪" },
+            { name: "Crash Course", url: "https://www.youtube.com/user/crashcourse", icon: "📺" },
+            { name: "Periodic Table", url: "https://ptable.com/", icon: "🧬" },
+            { name: "Physics Classroom", url: "https://www.physicsclassroom.com/", icon: "⚛️" },
+            { name: "Khan Academy Science", url: "https://www.khanacademy.org/science", icon: "🔬" }
+        ]
+    },
+    {
+        id: 3,
+        title: "📝 English & Language Resources",
+        category: "english",
+        description: "Grammar, Writing, Literature, Vocabulary builders",
+        links: [
+            { name: "Grammarly", url: "https://www.grammarly.com/", icon: "✏️" },
+            { name: "Purdue OWL", url: "https://owl.purdue.edu/owl/purdue_owl.html", icon: "📖" },
+            { name: "Vocabulary.com", url: "https://www.vocabulary.com/", icon: "🗣️" },
+            { name: "NoRedInk", url: "https://www.noredink.com/", icon: "✅" },
+            { name: "Project Gutenberg", url: "https://www.gutenberg.org/", icon: "📚" }
+        ]
+    },
+    {
+        id: 4,
+        title: "💻 Programming & CS Resources",
+        category: "programming",
+        description: "Coding tutorials, practice problems, and references",
+        links: [
+            { name: "freeCodeCamp", url: "https://www.freecodecamp.org/", icon: "💻" },
+            { name: "LeetCode", url: "https://leetcode.com/", icon: "🐛" },
+            { name: "HackerRank", url: "https://www.hackerrank.com/", icon: "⚡" },
+            { name: "MDN Web Docs", url: "https://developer.mozilla.org/", icon: "🌐" },
+            { name: "Python Tutor", url: "http://pythontutor.com/", icon: "🐍" }
+        ]
+    },
+    {
+        id: 5,
+        title: "🎓 General Study Tools",
+        category: "tools",
+        description: "Productivity tools, converters, and study aids",
+        links: [
+            { name: "Google Scholar", url: "https://scholar.google.com/", icon: "📚" },
+            { name: "Quizlet", url: "https://quizlet.com/", icon: "🧠" },
+            { name: "Forest App", url: "https://www.forestapp.cc/", icon: "🌳" },
+            { name: "Notion Templates", url: "https://www.notion.so/templates", icon: "📋" },
+            { name: "Study Music", url: "https://www.youtube.com/watch?v=SzDxtjRhqPc", icon: "🎧" }
+        ]
+    }
+];
+/* RENDER */
+function renderResources(data = resourcesData) {
+const container = document.getElementById("resourcesGrid");
+
+container.innerHTML = data.map(r => `
+<div class="resource-card">
+<h3>${r.title}</h3>
+<p>${r.description}</p>
+
+${r.links.map(link => `
+<a href="${link.url}" target="_blank" class="resource-link">
+🔗 ${link.name}
+</a>
+`).join("")}
+
+</div>
+`).join("");
+}
+
+/* SEARCH + GOOGLE */
+function handleSearch(event) {
+const value = event.target.value.toLowerCase();
+
+if (event.key === "Enter") {
+window.open(`https://www.google.com/search?q=${value}`, "_blank");
+return;
+}
+
+const filtered = resourcesData.filter(r =>
+r.title.toLowerCase().includes(value) ||
+r.description.toLowerCase().includes(value)
+);
+
+renderResources(filtered);
+}
+
+/* TOOLS */
+function openTool(tool) {
+const tools = {
+pomodoro: "https://tomato-timer.com/",
+calculator: "https://www.desmos.com/scientific",
+unitConverter: "https://www.unitconverters.net/",
+flashcards: "https://quizlet.com/"
+};
+
+window.open(tools[tool], "_blank");
+}
+
+/* LOGOUT */
+function logout() {
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('isLoggedIn');
+    window.location.href = "login.html";
+}
+
+/* INIT */
+if (localStorage.getItem('isLoggedIn') !== 'true') {
+    window.location.href = 'login.html';
+}
+
+renderResources();
+</script>
+<script>
+const menuToggle = document.querySelector(".menu-toggle");
+const navLinks = document.querySelector(".nav-links");
+if (menuToggle && navLinks) {
+    menuToggle.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+    });
+}
+</script>
+</body>
+</html>

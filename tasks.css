@@ -1,0 +1,237 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: hidden;
+}
+
+/* Study: planning & laptop — zoom + drift */
+@keyframes bgMotionTasks {
+    0% { transform: scale(1.05) translate(1%, 0); }
+    100% { transform: scale(1.14) translate(-2%, 2%); }
+}
+
+body {
+    background-color: #0d0618;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background: url("https://images.unsplash.com/photo-1506784365847-bbad939e9335?w=1920&q=85") center center / cover no-repeat;
+    transform-origin: 45% 45%;
+    animation: bgMotionTasks 32s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 0, 30, 0.60);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px max(20px, env(safe-area-inset-right)) 20px max(20px, env(safe-area-inset-left));
+}
+
+* {
+    max-width: 100%;
+}
+
+/* CARD */
+.card {
+    background: rgba(20, 20, 40, 0.6);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    backdrop-filter: blur(12px);
+    margin-bottom: 30px;
+}
+
+/* BUTTONS */
+.btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, var(--accent-1, #ff4ecd), var(--accent-deep, #a4133c));
+    color: white;
+}
+
+.btn-success {
+    background: linear-gradient(45deg, #51cf66, #40c057);
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(45deg, #ff6b6b, #ff5252);
+    color: white;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+}
+
+/* INPUTS */
+input, select, textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    font-size: 16px;
+    background: rgba(0,0,0,0.4);
+    color: white;
+    transition: 0.3s;
+    margin-bottom: 20px;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #bbb;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #ff4ecd;
+    background: rgba(0,0,0,0.6);
+}
+
+/* STATS GRID */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 25px;
+}
+
+/* STAT CARD */
+.stat-card {
+    background: rgba(30, 30, 60, 0.6);
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    transition: 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-10px);
+}
+
+.stat-number {
+    font-size: 3em;
+    font-weight: bold;
+    color: #ff8fab;
+}
+
+/* TITLES */
+h1, h2, h3 {
+    color: white;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+}
+
+.page-title {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* TASK ITEM */
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    background: rgba(40, 40, 80, 0.5);
+    border-radius: 15px;
+    border-left: 5px solid #ff4ecd;
+    transition: 0.3s;
+}
+
+.task-info {
+    flex: 1 1 200px;
+    min-width: 0;
+}
+
+.task-info h4 {
+    color: #fff;
+}
+
+.task-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.page-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.task-item:hover {
+    transform: translateX(10px);
+}
+
+.task-item.completed {
+    opacity: 0.6;
+    border-left-color: #51cf66;
+}
+
+.task-meta {
+    color: #ccc;
+}
+
+/* EMPTY */
+.empty-state {
+    text-align: center;
+    color: #aaa;
+    font-style: italic;
+    padding: 60px 20px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .card {
+        padding: 22px;
+    }
+}
+
+@media (max-width: 380px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}

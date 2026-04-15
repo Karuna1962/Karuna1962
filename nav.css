@@ -1,0 +1,132 @@
+/* Shared navigation — same on every page */
+
+.navbar {
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: max(15px, env(safe-area-inset-top)) 0 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    position: relative;
+}
+
+.logo {
+    font-size: 1.8em;
+    font-weight: bold;
+    background: linear-gradient(45deg, var(--accent-1, #ff4ecd), var(--accent-2, #ff8fab));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 30px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.nav-links li {
+    list-style: none;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    background: linear-gradient(45deg, var(--accent-1, #ff4ecd), var(--accent-hot, #ff6f91));
+    transform: translateY(-2px);
+}
+
+.nav-links .btn {
+    border-radius: 25px;
+    font-weight: 600;
+}
+
+.menu-toggle {
+    display: none !important;
+    font-size: 28px;
+    cursor: pointer;
+    color: #fff;
+    line-height: 1;
+    user-select: none;
+}
+
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        width: 100%;
+        margin-top: 10px;
+        padding: 15px 20px;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(12px);
+        border-radius: 18px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    }
+
+    .nav-links.active {
+        display: flex;
+        position: absolute;
+        top: calc(100% + 10px);
+        left: 0;
+        right: 0;
+        z-index: 999;
+    }
+
+    .nav-links a,
+    .nav-links .btn {
+        padding: 12px 16px;
+        font-size: 1rem;
+        width: 100%;
+        text-align: center;
+    }
+
+    .logout-item {
+        width: 100%;
+    }
+
+    .logo {
+        font-size: 1.35rem;
+    }
+
+    .menu-toggle {
+        display: block !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    body::after {
+        animation: none !important;
+        transform: none !important;
+    }
+}

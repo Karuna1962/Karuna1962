@@ -1,0 +1,138 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: hidden;
+}
+
+/* Study: desk & writing — slow zoom */
+@keyframes bgMotionAddTask {
+    0% { transform: scale(1) translate(0, 1%); }
+    100% { transform: scale(1.1) translate(1.5%, -1.5%); }
+}
+
+body {
+    background-color: #120818;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background: url("https://images.unsplash.com/photo-1519222970733-f546218fa6d7?w=1920&q=85") center center / cover no-repeat;
+    transform-origin: 55% 50%;
+    animation: bgMotionAddTask 38s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(50, 0, 60, 0.55);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px max(20px, env(safe-area-inset-right)) 20px max(20px, env(safe-area-inset-left));
+}
+
+* {
+    max-width: 100%;
+}
+
+/* CARD */
+.card {
+    background: rgba(35, 0, 45, 0.75); /* pinkish glass */
+    border-radius: 20px;
+    padding: 30px;
+    margin-top: 30px;
+    backdrop-filter: blur(12px);
+}
+
+/* TITLE */
+.page-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #fff;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.7);
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+}
+
+/* INPUTS */
+input, select, textarea {
+    width: 100%;
+    padding: 15px;
+    border-radius: 12px;
+    border: 2px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    margin-bottom: 20px;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #ff4ecd;
+    box-shadow: 0 0 10px rgba(255, 78, 205, 0.4);
+}
+
+/* BUTTONS */
+.btn {
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    transition: 0.3s;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, var(--accent-1, #ff4ecd), var(--accent-deep, #a4133c));
+    color: white;
+}
+
+.btn-back {
+    background: #eee;
+    color: #333;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+}
+
+/* BUTTON ROW */
+.btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* SUCCESS */
+#successMsg {
+    display: none;
+    text-align: center;
+    margin-top: 10px;
+    color: #4caf50;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .card {
+        padding: 22px;
+    }
+}

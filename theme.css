@@ -1,0 +1,14 @@
+/* Step 1 — global look: typography + future theme hooks */
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap");
+
+:root {
+    --font-sans: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --accent-1: #ff4ecd;
+    --accent-2: #ff8fab;
+    --accent-hot: #ff6f91;
+    --accent-deep: #a4133c;
+}
+
+body {
+    font-family: var(--font-sans);
+}

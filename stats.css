@@ -1,0 +1,224 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: hidden;
+}
+
+/* Study: analytics & progress — gentle breathe */
+@keyframes bgMotionStats {
+    0% { transform: scale(1.08) translate(0.5%, 0); }
+    100% { transform: scale(1.16) translate(-1.5%, 1%); }
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+body {
+    background-color: #050a14;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background: url("https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1920&q=85") center center / cover no-repeat;
+    transform-origin: 50% 35%;
+    animation: bgMotionStats 34s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px max(20px, env(safe-area-inset-right)) 20px max(20px, env(safe-area-inset-left));
+}
+
+* {
+    max-width: 100%;
+}
+
+/* CARD */
+.card {
+    background: rgba(20, 20, 40, 0.6); /* 🔥 darker glass */
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    backdrop-filter: blur(12px);
+    margin-bottom: 30px;
+    animation: floatUp 0.85s ease-out both;
+}
+
+/* BUTTONS */
+.btn {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, var(--accent-1, #ff4ecd), var(--accent-deep, #a4133c));
+    color: white;
+}
+
+.btn-success {
+    background: linear-gradient(45deg, #51cf66, #40c057);
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(45deg, #ff6b6b, #ff5252);
+    color: white;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+}
+
+/* INPUTS */
+input, select, textarea {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    font-size: 16px;
+    background: rgba(0,0,0,0.4); /* 🔥 darker */
+    color: white;
+    transition: 0.3s;
+    margin-bottom: 20px;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #bbb;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    background: rgba(0,0,0,0.6);
+}
+
+/* STATS GRID */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 25px;
+}
+
+/* STAT CARD */
+.stat-card {
+    background: rgba(30, 30, 60, 0.6); /* 🔥 darker */
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    transition: 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-10px);
+}
+
+.stat-number {
+    font-size: 3em;
+    font-weight: bold;
+    color: #a18cd1;
+}
+
+/* TITLES */
+h1, h2, h3 {
+    color: white;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.7);
+}
+
+.page-title {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* TASK ITEM */
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    background: rgba(40, 40, 80, 0.5); /* 🔥 darker */
+    border-radius: 15px;
+    border-left: 5px solid #667eea;
+    transition: 0.3s;
+}
+
+.task-item:hover {
+    transform: translateX(10px);
+}
+
+.task-item.completed {
+    opacity: 0.6;
+    border-left-color: #51cf66;
+}
+
+.task-meta {
+    color: #ccc;
+}
+
+/* EMPTY */
+.empty-state {
+    text-align: center;
+    color: #aaa;
+    font-style: italic;
+    padding: 60px 20px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .stat-number {
+        font-size: 2.25em;
+    }
+
+    .card {
+        padding: 22px;
+    }
+}
+
+@media (max-width: 380px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
